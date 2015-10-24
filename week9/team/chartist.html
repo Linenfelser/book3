@@ -48,8 +48,17 @@ var items   // global scope (i.e., can be accessed in javascript console)
 
 function solution1(){
     // TODO: replace the hard coded values in series by actual computation
+  var groups = _.groupBy(items, 'CrsPBADept')
+  groups = _.take(groups, 5)
+  map = _.mapValues(groups, function(g){
+    return g.length
+  })
+
+  keys = _.keys(map)
+  values = _.values(map)
+
     var data = {
-          labels: ['HIST', 'HONR', 'HUMN', 'IAFS', 'IPHY'],
+          labels: [groups],
           series: [
             [121,23,42,56,12]
           ]
@@ -75,22 +84,69 @@ function solution2(){
 
 
 function solution3(){
+  var groups = _.groupBy(items, 'CrsPBADept')
+    var counts = _.mapValues(groups, function(g){
+        return g.length
+    })
+    counts = _.object(_.map(counts, function (num, key) 
+        { 
+            if (num <= 100){return []}
+            return [key, num];
+        }))
+    
+    console.log("counts",counts)
+    var data = {
+          labels: _.keys(counts),
+          series: [
+            _.values(counts)
+          ]
+    }
+    new Chartist.Bar('#q3 .answer', data);
 }
 
 function solution4(){
+  var groups = _.groupBy(items, 'CrsPBADept')
+    var counts = _.mapValues(groups, function(g){
+        return g.length
+    })
+    counts = _.pairs(counts)
+    counts = _.sortBy(counts, function(value, key){return value[1]}).reverse()
+    counts = _.take(counts,10)
+    counts = _.object(counts)
+    
+    
+    console.log("counts",counts)
+    var data = {
+          labels: _.keys(counts),
+          series: [
+            _.values(counts)
+          ]
+    }
+    new Chartist.Bar('#q4 .answer', data);
 }
 
 function solution5(){
-    // TODO: replace the hard coded values in series by actual computation
+   var csci = _. filter(items, function(n){return n.CrsPBADept == "CSCI"}) 
+    var hist = _. filter(items, function(n){return n.CrsPBADept == "HIST"}) 
+    csci = _.groupBy(csci, function(n) {return Math.floor(n.Course/1000)})
+    hist = _.groupBy(hist, function(n) {return Math.floor(n.Course/1000)})
+    
+    csci = _.mapValues(csci, function(g){
+        return g.length
+    })
+    
+    hist  = _.mapValues(hist, function(g){
+        return g.length
+    })
     var data = {
           labels: ['1xxx', '2xxx', '3xxx', '4xxx'],
           series: [
-            [20,30,40,50],  // CSCI
-            [30,30,30,30]   // HIST
+            _.values(csci),  // CSCI
+            _.values(hist)  // HIST
           ]
     }
     new Chartist.Bar('#q5 .answer', data);
-}
+  }
 
 function run(id, solutionFunc, data){
     console.log('run solution for ' + id)

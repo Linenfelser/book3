@@ -58,12 +58,17 @@ function solution3(data){
 }
 
 function solution4(data){
-    return 'TODO'
+   var stuff = _.max(data, function(d){
+    return d.Attack
+   })
+    return stuff.Name
 }
 
 function solution5(data){
-    return 'TODO'
-}
+    var type = _.filter(data, function(d){
+        return d.Type == 'GRASS'
+    })
+    return _.pluck(type, 'Name') join(', ')
 
 function run(id, solutionFunc, data){
     console.log('run solution for ' + id)
