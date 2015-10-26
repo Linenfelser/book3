@@ -155,7 +155,15 @@ function solution1(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
+    var itemsInPhoenix = _.filter(items, {'city': 'Phoenix'})
+    var mac = _.filter(itemsInPhoenix, function(d){
+        return _.includes(d['name'], 'McDonald')
+    })
+    //console.log('mac: ',mac)
+    _.forEach(mac, function(f){
+        var latlng = [f['latitude'], f['longitude']]
+        L.marker(latlng).addTo(map)
+    })
 }
 
 function solution2(){
@@ -167,7 +175,14 @@ function solution2(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
+    var itemsInPhoenix = _.filter(items, {'city': 'Phoenix'})
+    var star = _.filter(itemsInPhoenix, function(d){
+        return _.includes(d['name'], 'Starbucks')
+    })
+    _.forEach(star, function(f){
+        var latlng = [f['latitude'], f['longitude']]
+        L.marker(latlng).addTo(map)
+    })
 }
 
 function solution3(){
@@ -179,12 +194,28 @@ function solution3(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
-    var circle = L.circle([33.45, -112.06], 500, {
-        color: 'red',
-        fillColor: '#f03',
+    var itemsInPhoenix = _.filter(items, {'city': 'Phoenix'})
+    var star = _.filter(itemsInPhoenix, function(d){
+        return _.includes(d['name'], 'Starbucks')
+    })
+    _.forEach(star, function(f){
+        var circle = L.circle([f['latitude'], f['longitude']], 500, {
+        color: 'green',
+        fillColor: 'green',
         fillOpacity: 0.5
     }).addTo(map);
+    })
+
+    var mac = _.filter(itemsInPhoenix, function(d){
+        return _.includes(d['name'], 'McDonald')
+    })
+    _.forEach(mac, function(f){
+        var circle = L.circle([f['latitude'], f['longitude']], 500, {
+        color: 'blue',
+        fillColor: 'blue',
+        fillOpacity: 0.5
+    }).addTo(map);
+    })
 }
 
 function solution4(){
@@ -196,12 +227,22 @@ function solution4(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
-    var circle = L.circle([33.45, -112.06], 500, {
+    var itemsInPhoenix = _.filter(items, {'city': 'Phoenix'})
+    var rat = _.filter(itemsInPhoenix, function(d){
+        return d['stars']
+    })
+    var stuff = _.take(rat, 200)
+    //console.log('rat: ', stuff)
+
+    _.forEach(stuff, function(d){
+        var circle = L.circle([d['latitude'], d['longitude']], 200, {
         color: 'red',
         fillColor: '#f03',
-        fillOpacity: 0.5
+        fillOpacity: d['stars'] /10
     }).addTo(map);
+    })
+
+    
 }
 
 function solution5(){
@@ -220,16 +261,19 @@ function solution5(){
     // TODO: modify the code below to develop your solution
 
     var itemsInPhoenix = _.filter(items, {'city': 'Phoenix'})
+    var star = _.filter(itemsInPhoenix, function(d){
+        return d.name == 'Starbucks'
+    })
 
-    // draw a line connecting the first two items
-    var latlng1 = [itemsInPhoenix[0].latitude, itemsInPhoenix[0].longitude]
-    var latlng2 = [itemsInPhoenix[1].latitude, itemsInPhoenix[1].longitude]
-    var latlngs = [latlng1, latlng2]
-    var polyline = L.polyline(latlngs, {color: 'yellow'}).addTo(map);
+    L.circle(cityCenterLatLng, 500, {color: 'black', fillOpacity: 1}).addTo(map)
 
-    // draw a circle on the first item
-    L.circle(latlng1, 500, {color: 'red'}).addTo(map);
-    L.circle(latlng2, 500, {color: 'blue'}).addTo(map);
+    var stuff = _.map(star, function(d){
+        var latlng2 = [d['latitude'], d['longitude']]
+        var latlngs = [cityCenterLatLng, latlng2]
+        var polyline = L.polyline(latlngs, {color: 'yellow'}).addTo(map);
+        L.circle(latlng2, 500, {color: 'red'}).addTo(map);
+
+    })
 }
 
 function solution6(){
@@ -244,6 +288,21 @@ function solution6(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
+    var itemsInPhoenix = _.filter(items, {'city': 'Phoenix'})
+    var star = _.filter(itemsInPhoenix, function(d){
+        return d.name == 'Starbucks'
+    })
+
+    L.circle(cityCenterLatLng, 500, {color: 'black', fillOpacity: 1}).addTo(map)
+
+    var stuff = _.map(star, function(d){
+        var latlng2 = [d['latitude'], d['longitude']]
+        var latlngs = [cityCenterLatLng, latlng2]
+        var polyline = L.polyline(latlngs, {color: 'yellow'}).addTo(map);
+        L.circle(latlng2, d.review_count*50, {color: 'red'}).addTo(map);
+
+    })
+
 }
 
 function solution7(){
@@ -255,7 +314,24 @@ function solution7(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
+    var itemsInPhoenix = _.filter(items, {'city': 'Phoenix'})
+    //console.log('items: ',itemsInPhoenix)
+    var rest = _.filter(itemsInPhoenix, function(d){
+        return _.includes(d['categories'], 'Restaurants')
+    } )
+    //console.log('rest: ',rest)
+
+    var stuff = _.filter(rest, function(d){
+        return d.stars >= 3.5 && d.review_count >= 5
+    })
+    //console.log('stuff: ',stuff)
+    _.forEach(stuff, function(d){
+        var circle = L.circle([d['latitude'], d['longitude']], 200, {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5
+    }).addTo(map);
+    })
 }
 
 function solution8(){
@@ -267,7 +343,24 @@ function solution8(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
+    var itemsInPhoenix = _.filter(items, {'city': 'Phoenix'})
+    //console.log('items: ',itemsInPhoenix)
+    var rest = _.filter(itemsInPhoenix, function(d){
+        return _.includes(d['categories'], 'Restaurants')
+    } )
+    //console.log('rest: ',rest)
+
+    var stuff = _.filter(rest, function(d){
+        return d.stars >= 3.5 && d.review_count >= 5
+    })
+    //console.log('stuff: ',stuff)
+    _.forEach(stuff, function(d){
+        var circle = L.circle([d['latitude'], d['longitude']], 200, {
+        color: (d.open?'green':'red'),
+        fillColor: (d.open?'green':'red'),
+        fillOpacity: 1
+    }).addTo(map);
+    })
 }
 
 function solution9(){
@@ -279,7 +372,19 @@ function solution9(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
+    var itemsInPhoenix = _.filter(items, {'city': 'Phoenix'})
+    //console.log('items: ',itemsInPhoenix)
+    var ups = _.filter(itemsInPhoenix, function(d){
+        return _.includes(d['name'], 'UPS')
+    } )
+    //console.log('ups: ',ups)
+    _.forEach(ups, function(d){
+        var circle = L.circle([d['latitude'], d['longitude']], 5000, {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5
+    }).addTo(map);
+    })
 }
 
 function solution10(){
@@ -291,7 +396,31 @@ function solution10(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
+    var itemsInPhoenix = _.filter(items, {'city': 'Phoenix'})
+    //console.log('items: ',itemsInPhoenix)
+    var mac = _.filter(itemsInPhoenix, function(d){
+        return _.includes(d['name'], 'McDonald')
+    } )
+    console.log('mac: ',mac)
+    _.forEach(mac, function(d){
+        var circle = L.circle([d['latitude'], d['longitude']], 1000, {
+        color: 'yellow',
+        fillColor: 'yellow',
+        fillOpacity: 0.5
+    }).addTo(map);
+    })
+
+    var bug = _.filter(itemsInPhoenix, function(d){
+        return _.includes(d['name'], 'Burger King')
+    } )
+    console.log('bug: ',bug)
+    _.forEach(bug, function(d){
+        var circle = L.circle([d['latitude'], d['longitude']], 1000, {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5
+    }).addTo(map);
+    })
 }
 
 var items = []
