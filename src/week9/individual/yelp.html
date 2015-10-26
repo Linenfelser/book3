@@ -86,36 +86,209 @@ function solution2(){
 
 function solution3(){
     var businessesInGilbert = _.filter(items, {city: 'Gilbert'})
+    //var map = _.map(businessesInGilbert)
+    var mac = _.filter(businessesInGilbert, function(d){
+        return _.includes(d['name'], 'McDonald')
+    })
+
+    var c0 = {latitude: mac[0]['latitude'], longitude: mac[0]['longitude']}   // Denver
+    var c1 = {latitude: mac[1]['latitude'], longitude: mac[1]['longitude']}   // Boulder
+    return geolib.getDistance(c0,c1)/1000 + ' km'
     // TODO: find McDonloads and compute the distance between the first two
-    return 'TODO'
 }
 
 function solution4(){
-    return 'TODO'
+    var businessesInGilbert = _.filter(items, {city: 'Phoenix'})
+    var mac = _.filter(businessesInGilbert, function(d){
+        return _.includes(d['name'], 'McDonald')
+    })
+    //console.log('MAC: ', mac)
+    for(i=0; i<mac.length; i++){
+        var lat = _.sum({latitude: mac[i]['latitude']})/mac.length
+        var lon = _.sum({longitude: mac[i]['longitude']})/mac.length
+        return lat,lon
+        //console.log('C: ',c)
+    }
+    //console.log('C: ',c)
 }
 
 function solution5(){
-    return 'TODO'
+    var businessesInGilbert = _.filter(items, {city: 'Phoenix'})
+    var mac = _.filter(businessesInGilbert, function(d){
+        return _.includes(d['name'], 'McDonald')
+    })
+    var star = _.filter(businessesInGilbert, function(d){
+        return _.includes(d['name'], 'Starbucks')
+    })
+    var max = _.max([star.length,mac.length])
+
+    if(mac.length == max){
+        return mac[0]['name']
+    }
+    else{
+        return star[0]['name']
+    }
 }
 
 function solution6(){
-    return 'TODO'
+    var businesses = _.filter(items, {city: 'Phoenix'})
+    var star = _.filter(businesses, function(d){
+        return _.includes(d['name'], 'Starbucks')
+    })
+
+    var map = _.map(star, function(d){
+        return{
+            'name': d['full_address'],
+            'rev': d['review_count']
+        }
+    })
+
+    var stuff = _.sortByOrder(map, function(d){
+        return d['rev']
+    })
+
+    var last = _.last(stuff)
+    return last['name']
+    
 }
 
 function solution7(){
-    return 'TODO'
+    //FINDING THE MOST REVIEWED STARBUCKS
+    var businesses = _.filter(items, {city: 'Phoenix'})
+    var star = _.filter(businesses, function(d){
+        return _.includes(d['name'], 'Starbucks')
+    })
+    
+    var starMax = _.max(star, function(d) {
+        return d.review_count
+    })
+
+    //FINDING THE MCDONALDS
+    var macbusiness = _.filter(businesses,{'name': "McDonald's"})
+    var coord = _.map(macbusiness, function(d){
+        return {
+            'name': d.name,
+            'address': d.full_address,
+            'latitude': d.latitude,
+            'longitude': d.longitude
+        }
+    })
+
+    var dist = _.map(coord, function(d){
+        var c0 = {latitude: starMax.latitude, longitude: starMax.longitude}
+        var c1 = {latitude: d.latitude, longitude: d.longitude}
+        var distance = geolib.getDistance(c0,c1)/1000
+        return {
+            'name': d.name,
+            'address': d.address,
+            'distance': distance
+        }
+    })
+
+    var minDist = _.min(dist, function(d){
+        return d.distance
+    })
+    
+    return minDist.name + minDist.address
+    //compare the lat and long values
 }
 
 function solution8(){
-    return 'TODO'
+    var businesses = _.filter(items, {city: 'Phoenix'})
+    var star = _.filter(businesses, function(d){
+        return _.includes(d['name'], 'Starbucks')
+    })
+    
+    var starMax = _.max(star, function(d) {
+        return d.review_count
+    })
+    
+
+    var coffee = _.filter(businesses, function(d){
+        return _.includes(d['categories'], 'Coffee')
+    })
+
+    var coord = _.map(coffee, function(d){
+        return{
+            'name': d.name,
+            'address': d.full_address,
+            'latitude': d.latitude,
+            'longitude': d.longitude
+        }
+    })
+
+    var dist = _.map(coord, function(d){
+        var c0 = {latitude: starMax.latitude, longitude: starMax.longitude}
+        var c1 = {latitude: d.latitude, longitude: d.longitude}
+        var distance = geolib.getDistance(c0,c1)/1000
+        return {
+            'name': d.name,
+            'address': d.address,
+            'distance': distance
+        }
+    })
+    var stuff = _.filter(dist, function(d){
+        return (d.distance <= 2.00)
+    })
+    return stuff.length
+
 }
 
 function solution9(){
-    return 'TODO'
+    var businesses = _.filter(items, {city: 'Phoenix'})
+    var mac = _.filter(businesses, function(d){
+        return _.includes(d['name'], 'McDonald')
+    })
+    var macStuff = _.map(mac, function(d) {
+        return {
+            'name': d.name,
+            'address': d.full_address,
+            'latitude': d.latitude,
+            'longitude': d.longitude 
+        }
+    })
+    var north = _.max(macStuff, function(d){
+        return d.latitude
+    })
+    console.log('north: ', north)
+    var south = _.min(macStuff, function(d){
+        return d.latitude
+    })
+    console.log('south', south)
+    return "north: " + north.address + '\n' + " south: " + south.address
+
 }
 
 function solution10(){
-    return 'TODO'
+    var bus = _.filter(items, {'city': 'Phoenix'})
+    var macInPhoenix = _.filter(bus, {'name': "McDonald's"})
+    var mcdonaldsCoordinates = _.map(macInPhoenix, function(d) {
+        return { 'name': d.name, 'address': d.full_address, 'latitude': d.latitude, 'longitude': d.longitude }
+    })
+    var starInPhoenix = _.filter(bus, {'name': "Starbucks"})
+    var starCoord = _.map(starInPhoenix, function(d) {
+        return { 'name': d.name, 'address': d.full_address, 'latitude': d.latitude, 'longitude': d.longitude }
+    })
+    var distToStarbucks = _.map(mcdonaldsCoordinates, function(d) {
+        var c1 = {latitude: d.latitude, longitude: d.longitude}
+        return _.map(starCoord, function(f) {
+            var c0 = {latitude: f.latitude, longitude: f.longitude}
+            var distance = geolib.getDistance(c0,c1)/1000
+            return { 'name': d.name, 'address': d.address, 'distance': distance }
+        })
+    })
+    var minDistances = _.map(distToStarbucks, function(d) {
+        var min_distance = _.min(_.pluck(d, 'distance'))
+        var address = _.unique(_.pluck(d, 'address'))
+        return { 'address': address, 'distance': min_distance }
+    })
+    var o = _.filter(minDistances, function(d) {
+        return d.distance > 5.00
+    })
+    var stuff = _.map(o, function(d) {
+        return d.address[0]
+    })
+    return stuff.join(', ') 
 }
 
 function run(id, solutionFunc, data){
