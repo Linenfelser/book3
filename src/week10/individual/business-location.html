@@ -36,14 +36,30 @@
 // Candidate Locations
 //
 
+// function getCandidateLocations(){
+//   var locations = []
+//   locations.push({latitude: 33.45, longitude: -112.03})
+//   locations.push({latitude: 33.45, longitude: -112.04})
+//   locations.push({latitude: 33.45, longitude: -112.05})
+//   locations.push({latitude: 33.45, longitude: -112.06})
+//   locations.push({latitude: 33.45, longitude: -112.07})
+//   locations.push({latitude: 33.45, longitude: -112.08})
+//   return locations
+// }
+
 function getCandidateLocations(){
   var locations = []
-  locations.push({latitude: 33.45, longitude: -112.03})
-  locations.push({latitude: 33.45, longitude: -112.04})
-  locations.push({latitude: 33.45, longitude: -112.05})
-  locations.push({latitude: 33.45, longitude: -112.06})
-  locations.push({latitude: 33.45, longitude: -112.07})
-  locations.push({latitude: 33.45, longitude: -112.08})
+  var m = 5
+  var n = m
+  var lat = 33.45
+  for (i = 0; i < m ; i++){
+    var long = -112.00
+    for ( j = 0; j < n; j++) {
+      locations.push({latitude: lat, longitude: long})
+      long = long - 0.02
+    } 
+    lat = lat + .02
+  }  
   return locations
 }
 
@@ -95,13 +111,30 @@ function is_not_within_third_mile_of_very_loud_places(loc){
     return hasTransportation
 }
 
-function has_some_feature_4(loc){
-  return false
+function has_shopping_within_1_mile(loc){
+  var withinHalfMile = _.filter(items, function(item){
+      var loc2  = _.pick(item, ['latitude', 'longitude'])
+      var d = geolib.getDistance(loc, loc2)
+      return geolib.convertUnit('mi', d) < 0.5
+    })
+    var hasTransportation = _.some(withinHalfMile, function (business){
+      return _.includes(business['categories'], 'Shopping')
+    })
+
+    return hasTransportation
 }
 
-function has_some_feature_5(loc){
-  // TODO
-  return false
+function has_nightlife_within_walking_distance(loc){
+   var withinHalfMile = _.filter(items, function(item){
+      var loc2  = _.pick(item, ['latitude', 'longitude'])
+      var d = geolib.getDistance(loc, loc2)
+      return geolib.convertUnit('mi', d) < 0.5
+    })
+    var hasTransportation = _.some(withinHalfMile, function (business){
+      return _.includes(business['categories'], 'Nightlife')
+    })
+
+    return hasTransportation
 }
 
 //
@@ -205,8 +238,8 @@ function loadDataThenRunSolutions(){
       scoreAndVisualize(locs, has_restaurants_within_1mi_with_5_or_more_stars, visualize_true_or_false)
       scoreAndVisualize(locs, has_breakfast_within_half_mile_with_free_wifi, visualize_true_or_false)
       scoreAndVisualize(locs, is_not_within_third_mile_of_very_loud_places, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_4, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_5, visualize_true_or_false)
+      scoreAndVisualize(locs, has_shopping_within_1_mile, visualize_true_or_false)
+      scoreAndVisualize(locs, has_nightlife_within_walking_distance, visualize_true_or_false)
 
    })
    .fail(function(err){
