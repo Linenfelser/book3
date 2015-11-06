@@ -94,12 +94,11 @@ correctly, and also what other teams are up to in real-time.
 
 The team members who contributed to this hackathon are:
 
-- (Name)
-- (Name)
-- (Name)
-- (Name)
-- (Name)
-- (Name)
+- (Andrew Linenfelser)
+- (Andrew Berumen)
+- (Caleb Hsu)
+- (Zili)
+
 
 ## Grading
 
@@ -109,15 +108,15 @@ Each person must implement at least ONE detector function. It must be meaningful
 
 Our team came up with the following interesting events:
 
-1. Has observed .... ? contributed by (Name)
+1. Has observed tweets about bombings (Andrew Linenfelser)
+
+  interesting because there is a lot going on in Syria with bombings right now
+
+1. Has observed 10 tweets about IS and Syria ? contributed by (Name)
 
   (one sentence justification why this event is interesting)
 
-1. Has observed .... ? contributed by (Name)
-
-  (one sentence justification why this event is interesting)
-
-1. Has observed .... ? contributed by (Name)
+1. Has observed tweets about the world cup ? contributed by (Name)
 
   (one sentence justification why this event is interesting)
 
