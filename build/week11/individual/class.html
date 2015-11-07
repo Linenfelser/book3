@@ -37,7 +37,7 @@
   <div class="parallax-container"  style="height:300px">
     <div class="parallax">
       <img src="cloud.jpg">
-      <h1 id="title">What is my online activity?
+      <h1 id="title">What is everyone in the class's activity?
         <div class="authors">by Name</div>
       </h1>
     </div>
@@ -57,19 +57,52 @@
   <script>
 
 // TODO: replace the FIREBAW_URL with your own
-var PERSONAL_FIREBASE_URL = 'https://linenfelser-bigdata-hci.firebaseio.com/'
+var CLASS_FORKS = 'https://big-data-hci-hackathon.firebaseio.com/book3/forks'
 
 // add the personal firebase url to the class's firebase
 
-// load events from the personal firebase
-var personal_firebase = new Firebase(PERSONAL_FIREBASE_URL)
-personal_firebase
-  .child('events')
-  .on('value', function(snapshot){
-    var events = snapshot.val()
-    analyze(events)
+new Firebase(CLASS_FORKS)
+  .once('value', function(snapshot){
+    var forks  = snapshot.val()
+
+    _.forEach(forks, function(fork){
+      var individual_github_name = fork.owner.login
+      var individual_firebase_url = 'https://' + individual_github_name + '-bigdata-hci.firebaseio.com'
+      console.log('firebase url', individual_firebase_url)
+
+      new Firebase(individual_firebase_url)
+        .child('events')
+        .once('value', function(snapshot){
+          var events = snapshot.val()
+
+          handle_individual_events(individual_github_name, events)
+
+        }, function(err){
+          console.error(err)
+        })
+
+    })
+
 })
 
+// array to collect event data from all individuals
+var class_events = {}
+
+// initial call to analyze when the class_events are still empty
+analyze(class_events)
+
+// each time events data from an individual is received, this event handler is called
+function handle_individual_events(name, individual_events){
+
+  // use the me of the
+  class_events[name] = individual_events
+
+  console.log('loaded data from ' + _.values(class_events).length + ' individuals')
+
+  analyze(class_events)
+}
+
+var firstTime = true
 function ask(func, events){
   var answer = func(events)
 
@@ -84,14 +117,14 @@ function ask(func, events){
 }
 
 function analyze(events){
-  console.log(events)
+  $('#questions').html('')
 
-  //ask(when_did_i_start_collecting, events)
-  ask(when_was_the_frist_email, events)
-  ask(how_many_emails_have_i_received_since, events)
-  ask(how_many_instagram_posts_have_i_liked, events)
-  ask(how_many_likes_on_the_first_picture_were_there, events)
-  ask(more_activity_on_emails_or_instagram, events)
+  ask(how_many_individuals_analyzed_so_far, events)
+  ask(whose_data_is_available, events)
+  ask(question1, events)
+  ask(question2, events)
+  ask(question3, events)
+  ask(question4, events)
   ask(question5, events)
   ask(question6, events)
   ask(question7, events)
@@ -100,96 +133,54 @@ function analyze(events){
   ask(question10, events)
 }
 
-// function when_did_i_start_collecting(events){
-//   var mail = _.values(events.gmail)
-//   var stuff = _.first(mail)
-//   var x = _.map(stuff)
-//   //var first = _.last(x[0].date)
-//   console.log('mail: ', (x[0]))
-
-//   return 'I started collecting from ' + first
-
-// }
-
-function how_many_emails_have_i_received_since(events){
-  return 'I received ' + _.values(events.gmail).length + ' emails.'
+function how_many_individuals_analyzed_so_far(events){
+  return _.keys(events).length
 }
 
-function how_many_instagram_posts_have_i_liked(events){
-  return 'I have liked ' + _.values(events.instagram).length + ' posts on instagram'
+function whose_data_is_available(events){
+  return _.keys(events).join(' , ')
 }
 
-function how_many_likes_on_the_first_picture_were_there(events){
-  var insta = _.values(events.instagram)
-  var stuff = _.map(_.first(insta))
-  //var x = _.map(stuff)
-  //console.log('instagram: ', (stuff[0]).likes)
-  var first = (stuff[0].likes).split('/')
-  //console.log(_.last(first))
-
-  return _.last(first)
-  
+function question1(events){
+  return '...'
 }
 
-function more_activity_on_emails_or_instagram(events){
-  var insta =  _.values(events.instagram).length
-  var email =  _.values(events.gmail).length
-
-  if(insta > email){
-    return 'More activity on instagram'
-  }
-  else{
-    return 'More activity with emails'
-  }
-
+function question2(events){
+  return '...'
 }
 
-function when_was_the_frist_email(events){
-  var mail = _.values(events.gmail)
-  var stuff = _.map(_.first(mail))
-  var first = (stuff[0].Date).split('/')
-  return _.last(first)
+function question3(events){
+  return '...'
+}
 
-  //console.log("4: ", first)
+function question4(events){
+  return '...'
 }
 
 function question5(events){
-  var insta = _.values(events.instagram)
-  var stuff = _.map(insta)
-  //var x = _.map(stuff)
-  console.log('stuff: ', stuff)
-  var max = _.max(stuff, function(d){
-    return 
-  })
-
-
-  var first = (stuff.likes)
-
-  console.log(first)
-
-  //return _.last(first)
-  
+  return '...'
 }
 
 function question6(events){
-  return 'I ...'
+  return '...'
 }
 
 function question7(events){
-  return 'I ...'
+  return '...'
 }
 
 function question8(events){
-  return 'I ...'
+  return '...'
 }
 
 function question9(events){
-  return 'I ...'
+  return '...'
 }
 
 function question10(events){
-  return 'I ...'
+  return '...'
 }
+
 
 // initialize the parallax effect
 $(document).ready(function(){
