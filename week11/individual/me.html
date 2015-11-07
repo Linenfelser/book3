@@ -1,0 +1,202 @@
+<html>
+<head>
+  <title>Me</title>
+    <style>
+        .answer {
+            min-height: 50px
+        }
+        section{
+          padding: 10px;
+          margin-bottom: 12px
+        }
+        #title {
+          position: absolute;
+          padding: 20px;
+          font-size: 64px;
+          font-weight: bolder;
+          color: white;
+          top: 50px;
+          left: 0px;
+          text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black
+        }
+        #title .authors {
+          padding: 20px;
+          font-size: 32px;
+          font-weight: bolder;
+          color: #BBB;
+          text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black
+        }
+        #tweets {
+          min-height: 300px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css">
+</head>
+<body>
+
+  <div class="parallax-container"  style="height:300px">
+    <div class="parallax">
+      <img src="cloud.jpg">
+      <h1 id="title">What is my online activity?
+        <div class="authors">by Name</div>
+      </h1>
+    </div>
+  </div>
+
+  <div class="section white container flow-text">
+      <div id="questions" class="col s10 collection">
+      </div>
+  </div>
+
+  <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
+  <script>
+
+// TODO: replace the FIREBAW_URL with your own
+var PERSONAL_FIREBASE_URL = 'https://linenfelser-bigdata-hci.firebaseio.com/'
+
+// add the personal firebase url to the class's firebase
+
+// load events from the personal firebase
+var personal_firebase = new Firebase(PERSONAL_FIREBASE_URL)
+personal_firebase
+  .child('events')
+  .on('value', function(snapshot){
+    var events = snapshot.val()
+    analyze(events)
+})
+
+function ask(func, events){
+  var answer = func(events)
+
+  // html element to display the answer
+  var answerHtml = '<div class="collection-item answer">' +
+      '<h4>' + _.startCase(func.name) + '? </h4>' +
+      '<div>' + answer + '</div>'
+    '</div>'
+
+  // append to #quetions
+  $('#questions').append(answerHtml)
+}
+
+function analyze(events){
+  console.log(events)
+
+  //ask(when_did_i_start_collecting, events)
+  ask(when_was_the_frist_email, events)
+  ask(how_many_emails_have_i_received_since, events)
+  ask(how_many_instagram_posts_have_i_liked, events)
+  ask(how_many_likes_on_the_first_picture_were_there, events)
+  ask(more_activity_on_emails_or_instagram, events)
+  ask(question5, events)
+  ask(question6, events)
+  ask(question7, events)
+  ask(question8, events)
+  ask(question9, events)
+  ask(question10, events)
+}
+
+// function when_did_i_start_collecting(events){
+//   var mail = _.values(events.gmail)
+//   var stuff = _.first(mail)
+//   var x = _.map(stuff)
+//   //var first = _.last(x[0].date)
+//   console.log('mail: ', (x[0]))
+
+//   return 'I started collecting from ' + first
+
+// }
+
+function how_many_emails_have_i_received_since(events){
+  return 'I received ' + _.values(events.gmail).length + ' emails.'
+}
+
+function how_many_instagram_posts_have_i_liked(events){
+  return 'I have liked ' + _.values(events.instagram).length + ' posts on instagram'
+}
+
+function how_many_likes_on_the_first_picture_were_there(events){
+  var insta = _.values(events.instagram)
+  var stuff = _.map(_.first(insta))
+  //var x = _.map(stuff)
+  //console.log('instagram: ', (stuff[0]).likes)
+  var first = (stuff[0].likes).split('/')
+  //console.log(_.last(first))
+
+  return _.last(first)
+  
+}
+
+function more_activity_on_emails_or_instagram(events){
+  var insta =  _.values(events.instagram).length
+  var email =  _.values(events.gmail).length
+
+  if(insta > email){
+    return 'More activity on instagram'
+  }
+  else{
+    return 'More activity with emails'
+  }
+
+}
+
+function when_was_the_frist_email(events){
+  var mail = _.values(events.gmail)
+  var stuff = _.map(_.first(mail))
+  var first = (stuff[0].Date).split('/')
+  return _.last(first)
+
+  //console.log("4: ", first)
+}
+
+function question5(events){
+  var insta = _.values(events.instagram)
+  var stuff = _.map(insta)
+  //var x = _.map(stuff)
+  console.log('stuff: ', stuff)
+  var max = _.max(stuff, function(d){
+    return 
+  })
+
+
+  var first = (stuff.likes)
+
+  console.log(first)
+
+  //return _.last(first)
+  
+}
+
+function question6(events){
+  return 'I ...'
+}
+
+function question7(events){
+  return 'I ...'
+}
+
+function question8(events){
+  return 'I ...'
+}
+
+function question9(events){
+  return 'I ...'
+}
+
+function question10(events){
+  return 'I ...'
+}
+
+// initialize the parallax effect
+$(document).ready(function(){
+    $('.parallax').parallax()
+})
+
+    </script>
+
+</body>
+</html>

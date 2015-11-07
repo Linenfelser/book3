@@ -49,12 +49,12 @@
 
 function getCandidateLocations(){
   var locations = []
-  var m = 5
-  var n = m
+  var x = 5
+  var y = 5
   var lat = 33.45
-  for (i = 0; i < m ; i++){
+  for (i = 0; i < x ; i++){
     var long = -112.00
-    for ( j = 0; j < n; j++) {
+    for ( j = 0; j < y; j++) {
       locations.push({latitude: lat, longitude: long})
       long = long - 0.02
     } 
