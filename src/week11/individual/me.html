@@ -38,7 +38,7 @@
     <div class="parallax">
       <img src="cloud.jpg">
       <h1 id="title">What is my online activity?
-        <div class="authors">by Name</div>
+        <div class="authors">by Andrew Linenfelser</div>
       </h1>
     </div>
   </div>
@@ -92,10 +92,10 @@ function analyze(events){
   ask(how_many_instagram_posts_have_i_liked, events)
   ask(how_many_likes_on_the_first_picture_were_there, events)
   ask(more_activity_on_emails_or_instagram, events)
-  ask(question5, events)
-  ask(question6, events)
-  ask(question7, events)
-  ask(question8, events)
+  ask(most_amount_of_likes_on_pic_i_liked, events)
+  ask(do_i_like_well_liked_pictures, events)
+  ask(how_many_emails_on_friday, events)
+  ask(least_amount_of_likes_on_a_pic_i_liked, events)
   ask(question9, events)
   ask(question10, events)
 }
@@ -153,34 +153,44 @@ function when_was_the_frist_email(events){
   //console.log("4: ", first)
 }
 
-function question5(events){
-  var insta = _.values(events.instagram)
-  var stuff = _.map(insta)
-  //var x = _.map(stuff)
-  console.log('stuff: ', stuff)
-  var max = _.max(stuff, function(d){
-    return 
-  })
-
-
-  var first = (stuff.likes)
-
-  console.log(first)
-
-  //return _.last(first)
+function most_amount_of_likes_on_pic_i_liked(events){
+  var insta = _.keys(events.instagram)
+  return _.max(insta)
+  //console.log('stuff: ', stuff)
   
 }
 
-function question6(events){
-  return 'I ...'
+function do_i_like_well_liked_pictures(events){
+  var insta = _.keys(events.instagram)
+
+  var avg = _.sum(insta)/insta.length
+  //console.log('insta: ', sum)
+  return 'The average number of likes on pictures I like is: ' + avg
 }
 
-function question7(events){
-  return 'I ...'
+function how_many_emails_on_friday(events){
+  var mail = _.mapValues(_.keys(events.gmail))
+  //var x = _.isString(mail[42])
+  var count = 0
+  
+  var last = _.last(_.keys(mail))
+  var fri
+  for(i=0; i<last; i++){
+    console.log('last', last)
+    if(_.startsWith(mail[i], 'Fri')){
+      count +=1
+    }
+  }
+  return count
+  //console.log('COUNT: ', count)
+  //console.log('fri: ', fri)
+  //console.log('gmail: ', mail)
+  //console.log('___X___: ', x)
 }
 
-function question8(events){
-  return 'I ...'
+function least_amount_of_likes_on_a_pic_i_liked(events){
+  var insta = _.keys(events.instagram)
+  return _.min(insta)
 }
 
 function question9(events){

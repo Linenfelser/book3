@@ -38,7 +38,7 @@
     <div class="parallax">
       <img src="cloud.jpg">
       <h1 id="title">What is everyone in the class's activity?
-        <div class="authors">by Name</div>
+        <div class="authors">by Andrew Linenfelser</div>
       </h1>
     </div>
   </div>
@@ -121,16 +121,16 @@ function analyze(events){
 
   ask(how_many_individuals_analyzed_so_far, events)
   ask(whose_data_is_available, events)
-  ask(question1, events)
-  ask(question2, events)
-  ask(question3, events)
-  ask(question4, events)
-  ask(question5, events)
-  ask(question6, events)
+  ask(how_many_used_gmail_zap, events)
+  ask(how_many_people_only_used_gmail, events)
+  ask(was_any_social_media_was_used, events)
+  ask(what_was_the_most_amount_of_zaps_for_1_person, events)
+  ask(what_was_the_least_amount_of_zaps_for_1_person, events)
+  ask(who_has_the_most_zaps, events)
+  ask(who_has_the_least_zaps, events)
   ask(question7, events)
-  ask(question8, events)
-  ask(question9, events)
-  ask(question10, events)
+  ask(did_anyone_include_github, events)
+  ask(who_included_github, events)
 }
 
 function how_many_individuals_analyzed_so_far(events){
@@ -141,44 +141,112 @@ function whose_data_is_available(events){
   return _.keys(events).join(' , ')
 }
 
-function question1(events){
-  return '...'
+function how_many_used_gmail_zap(events){
+  var stuff = _.values(events)
+  var things = _.filter(stuff, function(d){
+    return _.includes(_.keys(d),'gmail')
+  })
+  return things.length + ' out of ' + stuff.length + ' people included gmail'
+} 
+
+function how_many_people_only_used_gmail(events){
+  var stuff = _.values(events)
+  var things = _.filter(stuff, function(d){
+    return _.keys(d) == 'gmail'
+  })
+  return things.length + ' out of ' + stuff.length + ' people included gmail'
 }
 
-function question2(events){
-  return '...'
+function was_any_social_media_was_used(events){
+  var stuff = _.values(events)
+  var things = _.flatten(_.map(stuff, function(d){
+    return _.keys(d)
+  }))
+
+  var filter = _.filter(things, function(d){
+    return d == 'instagram' || d == 'facebook' || d == 'twitter'
+  })
+  
+  var group = _.groupBy(filter)
+  return 'yes, ' + _.keys(group) + ' was used'
 }
 
-function question3(events){
-  return '...'
+function what_was_the_most_amount_of_zaps_for_1_person(events){
+  var stuff = _.values(events)
+  var things = _.mapValues(stuff, function(d){
+    return _.size(d)
+  })
+  return _.max(things)
 }
 
-function question4(events){
-  return '...'
+function what_was_the_least_amount_of_zaps_for_1_person(events){
+  var stuff = _.values(events)
+  var things = _.mapValues(stuff, function(d){
+    return _.size(d)
+  })
+  return _.min(things)
 }
 
-function question5(events){
-  return '...'
+function who_has_the_most_zaps(events){
+ var stuff = _.mapValues(events, function(d) {
+    return _.size(d)
+  })
+
+  var max = _.max(stuff)
+  var most = _.filter(_.map(stuff,function(d,name){
+    if(d == max){
+      return name
+    }
+  }))
+  return most
+
 }
 
-function question6(events){
-  return '...'
+function who_has_the_least_zaps(events){
+  var stuff = _.mapValues(events, function(d) {
+    return _.size(d)
+  })
+
+  var min = _.min(stuff)
+  var least = _.filter(_.map(stuff,function(d,name){
+    if(d == min){
+      return name
+    }
+  }))
+  return least
 }
 
 function question7(events){
-  return '...'
+  var stuff = _.values(events)
+  //console.log('STUFF: ', stuff)
+
+  var gmail = _.filter(stuff, function(d){
+    return _.keys(d) == 'gmail'
+  })
+
+  var length = _.forEach(gmail, function(d){
+    return d.gmail.length
+  })
+  //console.log('GMAIL: ', length)
+  
 }
 
-function question8(events){
-  return '...'
+function did_anyone_include_github(events){
+  var stuff = _.values(events)
+  var things = _.filter(stuff, function(d){
+    return _.includes(_.keys(d), 'github')
+  })
+  return things.length + ' out of ' + stuff.length + ' people included github'
 }
 
-function question9(events){
-  return '...'
-}
+function who_included_github(events){
+  var stuff = _.mapValues(events, function(d){
+    return _.includes(d, 'gmail')
+  })
+  console.log('STUFF: ', stuff)
+  var names = _.groupBy(stuff)
+  console.log('NAMES: ', names)
 
-function question10(events){
-  return '...'
 }
 
 
