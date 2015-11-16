@@ -96,7 +96,7 @@ function analyze(events){
   ask(do_i_like_well_liked_pictures, events)
   ask(how_many_emails_on_friday, events)
   ask(least_amount_of_likes_on_a_pic_i_liked, events)
-  ask(question9, events)
+  ask(how_many_emails_on_saturday, events)
   ask(question10, events)
 }
 
@@ -193,8 +193,20 @@ function least_amount_of_likes_on_a_pic_i_liked(events){
   return _.min(insta)
 }
 
-function question9(events){
-  return 'I ...'
+function how_many_emails_on_saturday(events){
+  var mail = _.mapValues(_.keys(events.gmail))
+  //var x = _.isString(mail[42])
+  var count = 0
+  
+  var last = _.last(_.keys(mail))
+  var fri
+  for(i=0; i<last; i++){
+    console.log('last', last)
+    if(_.startsWith(mail[i], 'Sat')){
+      count +=1
+    }
+  }
+  return count
 }
 
 function question10(events){
