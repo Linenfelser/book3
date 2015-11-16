@@ -1,0 +1,79 @@
+<html>
+<head>
+    <style>
+        .answer {
+            min-height: 50px
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Zayo Group Analysis</h1>
+
+    <section id="q1" class="question">
+        <h4>?</h4>
+        <div class="answer"></div>
+    </section>
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
+
+    <script src="/js/moment.min.js"></script>
+    <script>
+var items   // global scope (i.e., can be accessed in javascript console)
+function solution1(){
+  console.log('items:::::', items)
+
+  var sort = _.sortByOrder(items, function(d){
+    return d.Vertical //change to total (BRR) when fixed
+  })
+  console.log('sort', sort)
+  var best = sort[sort.length-2]
+  console.log('best: ', best)
+  return 'the best Total BRR is ' + best.Vertical + ' and the industry is ' + best.Industry
+
+  // var healthcare = _.groupBy(items,function(d){
+  //       return d.Industry == 'Health Insurance'
+  //   })['true']
+  // console.log('healthcare', healthcare)
+  
+  // var brr = _.pick(healthcare, function(d){
+  //   return d['Product A Total BRR'] || d['Product B Total BRR'] || d['Product C Total BRR']
+  // })
+  // console.log('brr: ', brr)
+  
+  
+}
+
+
+
+function run(id, solutionFunc, data){
+    console.log('run solution for ' + id)
+    var answer = solutionFunc(data)
+    $(id).find('.answer').html(answer)
+}
+function loadDataThenRunSolutions(){
+    $.get({url: '../Team/profile.json'})
+     .done(function(data){
+        //  var lines = data.trim().split('\n')
+        items = data
+         // convert text lines to json arrays and save them in `items`
+        //  items = _.map(lines, JSON.parse)
+         console.log('number of items loaded:', items.length)
+         console.log('first item', items[0])
+         run('#q1', solution1, items)
+     })
+     .fail(function(err){
+         console.error(err)
+     })
+}
+loadDataThenRunSolutions()
+    </script>
+
+</body>
+</html>
