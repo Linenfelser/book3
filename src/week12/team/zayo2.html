@@ -27,27 +27,17 @@
     <script>
 var items   // global scope (i.e., can be accessed in javascript console)
 function solution1(){
-  console.log('items:::::', items)
+  //console.log('items:::::', items)
 
   var sort = _.sortByOrder(items, function(d){
     return d.Vertical //change to total (BRR) when fixed
   })
-  console.log('sort', sort)
+  //console.log('sort', sort)
   var best = sort[sort.length-2]
   console.log('best: ', best)
   return 'the best Total BRR is ' + best.Vertical + ' and the industry is ' + best.Industry
 
-  // var healthcare = _.groupBy(items,function(d){
-  //       return d.Industry == 'Health Insurance'
-  //   })['true']
-  // console.log('healthcare', healthcare)
-  
-  // var brr = _.pick(healthcare, function(d){
-  //   return d['Product A Total BRR'] || d['Product B Total BRR'] || d['Product C Total BRR']
-  // })
-  // console.log('brr: ', brr)
-  
-  
+    
 }
 
 
