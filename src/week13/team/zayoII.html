@@ -67,7 +67,7 @@ function solution1(){
   //console.log('__sortedMap__', sortedMap)
 
   var topFive = _.takeRight(sortedMap, 5).reverse()
-  console.log('__topFive__', topFive)
+  //console.log('__topFive__', topFive)
 
   var one = topFive[0].ID
   var two = topFive[1].ID
@@ -79,7 +79,7 @@ function solution1(){
   var match = _.forEach(_.filter(services, function(d,k){
     return d['Name/ID'] == one || d['Name/ID'] == two ||d['Name/ID'] == three ||d['Name/ID'] == four ||d['Name/ID'] == five
   }))
-  console.log('match', match)
+  //console.log('match', match)
 
   var clean2 = _.filter(match,function(d){
    return !_.contains(d[" Total MRR "],"$-")
@@ -91,15 +91,16 @@ function solution1(){
       'TotalMRR' : parseInt(d[' Total MRR '].split("$")[1].split(',').join("")),
     }
   }))
-  console.log('mapMatch', mapMatch)
+  // console.log('mapMatch2', clean2)
+  // console.log('mapMatch', mapMatch)
 
   var groupMatchSort = _.sortBy(mapMatch, 'TotalMRR')
-  console.log('groupMatchSort', groupMatchSort)
+  //console.log('groupMatchSort', groupMatchSort)
 
   var groupMatch = _.groupBy(groupMatchSort, function(d){
     return d.ID
   })
-  console.log('groupMatch', groupMatch)
+  //console.log('groupMatch', groupMatch)
 
   var industryString = ''
   var topPrint = _.forEach(topFive, function(d, k){
@@ -121,9 +122,6 @@ function numberWithCommas(x) {
 }
 
 
-
-
-
 function solution2(){
   // var c = customer
   // console.log('customer: ', c)
@@ -135,8 +133,25 @@ function solution4(){
   return '...'
 }
 function solution5(){
-  return '&nbsp&nbsp&nbsp&nbsp&nbsp Tranzact accounts without services should be prioritized by "Industry" and "Vertical." Telecommunications is obviously the leader in BRR, therefore being the most profitable industry to go after. The top ten industries/ verticals could be analyzed and their top products would be the projected products for the accoutns that currently lack services. '
+
+  // var filterService = _.filter(noServices, function(d){
+  //   return d.SalesVolume == '$-' || d.PriorYearRevenue == '$-'
+  // })
+  // console.log('filterService', filterService)
+  
+  
+  // var mapRevenue = _.forEach(_.map(noServices, function(d){
+  //   return{
+  //     'Industry' : d.Industry,
+  //     'Vertical' : d.Vertical,
+  //     'Revenue' : parseInt(d[' SalesVolume '].replace(/,/g,'').split('$')[1]),
+  //     'Sales' : parseInt(d[' PriorYearRevenue '].replace(/,/g,'').split('$')[1])
+  //   }
+  // }))
+  // console.log('map: ', mapRevenue)
+
 }
+
 function run(id, solutionFunc, data){
     console.log('run solution for ' + id)
     var answer = solutionFunc(data)
@@ -184,9 +199,32 @@ function loadDataThenRunSolutions2(){
          console.error(err)
      })
 }
+function loadDataThenRunSolutions3(){
+    $.get({url: '../team/noServices.json'})
+     .done(function(data){
+        //  var lines = data.trim().split('\n')
+        noServices = data
+         // convert text lines to json arrays and save them in `items`
+        //  items = _.map(lines, JSON.parse)
+
+         console.log('number of noServices items loaded:', noServices.length)
+         console.log('first noServices item', noServices[0])
+
+         //run('#q1', solution1, noServices)
+         // run('#q2', solution2, noServices)
+         // run('#q3', solution3, noServices)
+         // run('#q4', solution4, noServices)
+          run('#q5', solution5, noServices)
+     })
+     .fail(function(err){
+         console.error(err)
+     })
+}
 
 loadDataThenRunSolutions()
 loadDataThenRunSolutions2()
+loadDataThenRunSolutions3()
+
 
     </script>
 
