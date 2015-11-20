@@ -122,8 +122,8 @@ function ask(text, func){
 function analyze(){
   ask('How does the word ski and snowboard change over time?', func1)
   ask('was the moon landing a hoax?', func2)
-  ask('question3?', func3)
-  ask('question4?', func4)
+  ask('Can we see how gender equality has changed in Latin American culture in the past 200 years?', func3)
+  ask('When did Artificial Intelligence become popular in the mainstream society?', func4)
   ask('question5?', func5)
 
   $('pre code').each(function(i, block) {
@@ -141,11 +141,13 @@ function func2(){
 }
 
 function func3(){
-  return '...'
+  return '<iframe name="ngram_chart" src="https://books.google.com/ngrams/interactive_chart?content=se%C3%B1ora%2Cfeminista%2Cse%C3%B1orita&year_start=1900&year_end=2015&corpus=21&smoothing=3&share=&direct_url=t1%3B%2Cse%C3%B1ora%3B%2Cc0%3B.t1%3B%2Cfeminista%3B%2Cc0%3B.t1%3B%2Cse%C3%B1orita%3B%2Cc0" width=900 height=500 marginwidth=0 marginheight=0 hspace=0 vspace=0 frameborder=0 scrolling=no></iframe>'
+
 }
 
 function func4(){
-  return '...'
+  return '<iframe name="ngram_chart" src="https://books.google.com/ngrams/interactive_chart?content=singularity%2CAI%2Cartificial+intelligence%2CTerminator&year_start=1900&year_end=2008&corpus=15&smoothing=0&share=&direct_url=t1%3B%2Csingularity%3B%2Cc0%3B.t1%3B%2CAI%3B%2Cc0%3B.t1%3B%2Cartificial%20intelligence%3B%2Cc0%3B.t1%3B%2CTerminator%3B%2Cc0" width=900 height=500 marginwidth=0 marginheight=0 hspace=0 vspace=0 frameborder=0 scrolling=no></iframe>'
+
 }
 
 function func5(){
