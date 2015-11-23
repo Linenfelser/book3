@@ -74,28 +74,71 @@ function example3(){
 }
 
 function func1(){
-  return '...'
+  
+  var samples = _.flatten(_.pluck(items, 'Samples'))
+  
+  var unique = _.uniq(_.filter(samples, function(d){
+    return d>0
+  }))
+  // console.log('unique:', unique)
+  return 'There are ' + unique.length + ' unique numbers: ' + unique
 }
 
 function func2(){
+  //console.log('ITEMS:', items)
   return '...'
 }
 
 function func3(){
-  return '...'
+  var time = _.find(items, function(d){
+    return d.Ping_time == '09:57:18'
+  })
+  //console.log('TIME:', time)
+  var s = _.filter(time, function(d){
+    return d.Samples == '7.000000'
+  })
+  return s.length
 }
 
 function func4(){
-  return '...'
+  var group = _.groupBy(items, "Ping_time")
+  var map = _.mapValues(group, function(d){
+    return _.filter(d[0].Samples, function(f){ 
+      return f == 3
+    }).length
+  })
+
+  var pairs = _.pairs(map)
+  var sort = _.sortBy(pairs, function(d){
+    return d[1]
+  })
+
+  var sorts = sort[sort.length-1][0]
+  return 'the measurement at ' + sorts
 }
 
 function func5(){
-  return '...'
+  var sample = _.filter(items, function(d){
+    return _.every(d.Samples, function(f){
+      return f<= 0.000000
+    })
+  })
+  return sample.length
 }
 
 function func6(){
-  return '...'
-}
+  var sample = _.flatten(_.pluck(items, 'Samples'))
+  //console.log('sample:', sample)
+  var greater = _.filter(sample, function(d){
+    return d > 0
+  })
+  
+  var group = _.groupBy(greater)
+  var most = _.max(group, function(d){
+    return d.length
+  })
+  return most[0]
+} 
 
 function func7(){
 
@@ -118,10 +161,28 @@ function func7(){
 }
 
 function func8(){
+
+  var first = items[0]
+  var pos = [first.Latitude, first.Longitude]
+  var el = $(this).find('.viz')[0]    // lookup the element that will hold the map
+  $(el).height(500) // set the map to the desired height
+  var map = createMap(el, pos, 9)
+
+  //var polyline = L.polyline([]).addTo(map)
+
+  _.forEach(items, function(d){
+    pos = [d.Latitude, d.Longitude]
+    var circle = L.circle(pos, 500, {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.3,
+    }).addTo(map);
+  })
   return '...'
 }
 
 function func9(){
+
   return '...'
 }
 
@@ -130,9 +191,49 @@ function func10(){
 }
 
 function func11(){
+
+  var first = items[0]
+  var pos = [first.Latitude, first.Longitude]
+  var el = $(this).find('.viz')[0]    // lookup the element that will hold the map
+  $(el).height(500) // set the map to the desired height
+  var map = createMap(el, pos, 15)
+  
+  _.forEach(items, function(d){
+      if(_.some(d.Samples,function(s){
+          return s == 1 || s == 3 || s == 4}))
+      {
+        //console.log("tru")
+        pos = [d.Latitude, d.Longitude]
+        var circle = L.circle(pos, 10, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5
+        }).addTo(map);
+      }
+  })
   return '...'
-}
+  }
+
 
 function func12(){
+  var first = items[0]
+  var pos = [first.Latitude, first.Longitude]
+  var el = $(this).find('.viz')[0]    // lookup the element that will hold the map
+  $(el).height(500) // set the map to the desired height
+  var map = createMap(el, pos, 15)
+  
+  _.forEach(items, function(d){
+      if(_.some(d.Samples,function(s){
+          return s == 7 || s == 13 || s == 20}))
+      {
+        //console.log("tru")
+        pos = [d.Latitude, d.Longitude]
+        var circle = L.circle(pos, 10, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5
+        }).addTo(map);
+      }
+  })
   return '...'
 }
