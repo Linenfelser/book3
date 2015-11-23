@@ -224,7 +224,7 @@ function func12(){
   
   _.forEach(items, function(d){
       if(_.some(d.Samples,function(s){
-          return s == 7 || s == 13 || s == 20}))
+          return s == 7 || s == 13}))
       {
         //console.log("tru")
         pos = [d.Latitude, d.Longitude]
