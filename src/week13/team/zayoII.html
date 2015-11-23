@@ -109,8 +109,8 @@ function solution1(){
     industryString += ( k+1 +')  ' + d.ID +' : '+ d.Industry + ' (' + d.Vertical + ')' +'<br>'+
       '----->TOTAL BRR: $' + numberWithCommas(d['TotalBRR']) + '<br>'+ 
       '----->Top Two Products: '+'<br>' + 
-      '----------' + groupMatch[num][groupMatch[num].length-1]['Product'] + ' --->TotalMRR: '+ groupMatch[num][groupMatch[num].length-1]['TotalMRR'] + '<br>' +
-      '----------' + groupMatch[num][groupMatch[num].length-2]['Product'] + ' --->TotalMRR: '+ groupMatch[num][groupMatch[num].length-2]['TotalMRR'] +
+      '----------' + groupMatch[num][groupMatch[num].length-1]['Product'] + ' --->TotalMRR: '+ '$' +numberWithCommas(groupMatch[num][groupMatch[num].length-1]['TotalMRR']) + '<br>' +
+      '----------' + groupMatch[num][groupMatch[num].length-2]['Product'] + ' --->TotalMRR: '+ '$' +numberWithCommas(groupMatch[num][groupMatch[num].length-2]['TotalMRR']) +
        '<br>' +
       '<br>')
   })
@@ -133,24 +133,61 @@ function solution4(){
   return '...'
 }
 function solution5(){
+  
+  var mapStuff = _.forEach(_.map(noServices, function(d){
+    return{
+      'Industry' : d.Industry,
+      'Vertical' : d.Vertical,
+      'Revenue' : parseInt(d[' SalesVolume '].replace(/,/g,'').split('$')[1]),
+      'Sales' : parseInt(d[' PriorYearRevenue '].replace(/,/g,'').split('$')[1])
+    }
+  }))
 
-  // var filterService = _.filter(noServices, function(d){
-  //   return d.SalesVolume == '$-' || d.PriorYearRevenue == '$-'
-  // })
-  // console.log('filterService', filterService)
+  var sort = _.sortBy(mapStuff, 'Revenue')
+  var maxRevenue = _.max(mapStuff, 'Revenue')
+  var maxSales = _.max(mapStuff, 'Sales')
   
+
+  var filterSalesIndustry = _.filter(details, function(d){
+    return d.Industry == maxSales.Industry
+  })
+  console.log('filterSalesIndustry:', filterSalesIndustry)
+
+  var clean = _.filter(filterSalesIndustry,function(d){
+   return !_.contains(d[" Total BRR "],"$-")
+  })
+
+   var map = _.forEach(_.map(clean, function(d){
+    return{
+      'TotalBRR' : parseInt(d[' Total BRR '].split("$")[1].split(',').join("")),
+      'ID' : parseInt(d['Name/ID'])
+    }
+  })) 
+
+  var sortedSalesIndustry = _.sortBy(map, 'TotalBRR')
+  var topID = sortedSalesIndustry[sortedSalesIndustry.length-1]['ID']
+
+  var match = _.forEach(_.filter(services, function(d,k){
+      return d['Name/ID'] == topID
+    }))
   
-  // var mapRevenue = _.forEach(_.map(noServices, function(d){
-  //   return{
-  //     'Industry' : d.Industry,
-  //     'Vertical' : d.Vertical,
-  //     'Revenue' : parseInt(d[' SalesVolume '].replace(/,/g,'').split('$')[1]),
-  //     'Sales' : parseInt(d[' PriorYearRevenue '].replace(/,/g,'').split('$')[1])
-  //   }
-  // }))
-  // console.log('map: ', mapRevenue)
+  var potentialProducts = ''
+  var findProducts = _.forEach(match, function(d){
+    potentialProducts += d.Product + ' ' + ','
+  })
+
+  return 'I would prioritize potential customers by which industries have the most sales and revenue and choose the next customers based off of that. If there are already customers with the same industry as these top inductries, the top products of those industries would be the potential products for the potential customers. If there is no data about the new industry, then further analysis would have to be done in order to determine suitable products.' +
+  '<br>' +'<br>' +
+  'The industry with max sales is: ' + maxSales.Industry + '<br>' + 
+  'The industry with the max revenue is: ' + maxRevenue.Industry +
+  '<br>' +'<br>' +
+  'The potential products are: ' + potentialProducts
+  
 
 }
+
+
+
 
 function run(id, solutionFunc, data){
     console.log('run solution for ' + id)
@@ -193,7 +230,7 @@ function loadDataThenRunSolutions2(){
          // run('#q2', solution2, services)
          // run('#q3', solution3, services)
          // run('#q4', solution4, services)
-         // run('#q5', solution5, services)
+         run('#q5', solution5, services)
      })
      .fail(function(err){
          console.error(err)
