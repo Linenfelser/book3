@@ -6,7 +6,8 @@ layout: layout.hbs
 
 # Team
 
-- [Zayo - Part II](team/zayoii.html)
+- [Zayo - Question 1](team/question5.html)
+- [Zayo - Question 5](team/question1.html)
 
 # Individual
 
