@@ -159,7 +159,11 @@ function solution3(){
 
 function solution4(){
   //What is the geographical center of all the McDonald's in the city of Phoenix?
-    return 'TODO'
+    var mc = _.filter(items, {city: 'Phoenix', name: "McDonald's"})
+    var coordinates = geolib.getCenter(_.map(mc, function(f){
+        return {'latitude': f.latitude, 'longitude': f.longitude}
+    }))
+    return 'latitude: ' + coordinates.latitude + ', longitude: ' + coordinates.longitude
 }
 
 function solution5(){
@@ -267,24 +271,30 @@ function solution9(){
 
 function solution10(){
   //In Phoenix, which McDonald's has no Starbucks located within 5 kms?
-  var Phoenix = _.filter(items, {city: 'Phoenix'})
-  var mac = _.filter(Phoenix, function(d){
-      return _.includes(d.name, 'McDonald')
-    })
-  var star = _.filter(Phoenix, function(d){
-      return _.includes(d.name, 'Starbucks')
-    })
-  var compute = _.forEach(mac, function(d){
-    loc1 = _.pick(d, ['latitude', 'longitude'])
 
-    var within5Mile = _.filter(star, function(item){
-      var loc2  = _.pick(item, ['latitude', 'longitude'])
-      var d = geolib.getDistance(loc1, loc2)
-    })
-    console.log('notWithin: ', within5Mile) 
-    return geolib.convertUnit('mi', d) < 5
+  var businessesInPhoenix = _.filter(items, {city: 'Phoenix'});
+  var star = _.filter(businessesInPhoenix, {"name": "Starbucks"});
+  var mc = _.filter(businessesInPhoenix, {"name": "McDonald's"});
+  var len = _.size(star);
+  var mcInPhoenix = _.filter(mc, function(d){
+      closeSB = _.find(star,function(f){
+          var dist = geolib.getDistance(
+              {latitude: d.latitude,  longitude: d.longitude},
+              {latitude: f.latitude,  longitude: f.longitude});
+          // console.log (dist+": "+d.business_id)
+          return dist <= 5000;
+      });
+      if (_.isUndefined(closeSB)) {
+          return true;  // keep the McD's that don't have a close SB
+      }
+      return false;
   })
-  console.log('compute',compute )
+  if (_.size(mcInPhoenix) == 1)
+    return "The Mcdonald's is at "+mcDInPhoenix[0].full_address+" (id: "+mcDInPhoenix[0].business_id+")";
+  else if (_.size(mcInPhoenix) > 1)
+      return _.pluck(mcInPhoenix, 'full_address').join(',<br> ')
+  return "All the McDonald's have a Starbucks within 5km"
+
 }
 
 function run(id, solutionFunc, data){
