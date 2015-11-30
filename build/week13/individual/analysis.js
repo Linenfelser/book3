@@ -85,8 +85,30 @@ function func1(){
 }
 
 function func2(){
-  //console.log('ITEMS:', items)
-  return '...'
+  // console.log('ITEMS:', items)
+  // var first = 0
+  // var second = 0
+  // var compare = _.forEach(_.map(items, function(d){
+  //   return{
+  //     'time' : d['Ping_time'],
+  //     'timeParse' :  parseInt(d['Ping_time'].split(":")[2])
+  //   }
+  // }))
+
+  // var average = 0
+  // for(k=0, k<compare.length; k++){
+  //   first = compare[k]
+  //   second = compare[k+1]
+  //   average = (second['timeParse'] + first['timeParse'])
+  //   console.log('second', second['timeParse'])
+  // }
+    
+  // console.log('second', second['timeParse'])
+  // console.log('first:', first['timeParse'])
+  // console.log(compare)
+  // average = average/compare.length
+  // console.log('average:',average)
+  // return average
 }
 
 function func3(){
